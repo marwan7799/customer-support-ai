@@ -1,0 +1,26 @@
+[
+  {
+    "product_id": "P1001",
+    "name": "Wireless Headphones",
+    "price": 79.99,
+    "stock": 12,
+    "category": "Audio",
+    "warranty_months": 12
+  },
+  {
+    "product_id": "P1002",
+    "name": "Mechanical Keyboard",
+    "price": 89.99,
+    "stock": 7,
+    "category": "Accessories",
+    "warranty_months": 12
+  },
+  {
+    "product_id": "P1003",
+    "name": "USB-C Dock",
+    "price": 59.99,
+    "stock": 0,
+    "category": "Accessories",
+    "warranty_months": 6
+  }
+]

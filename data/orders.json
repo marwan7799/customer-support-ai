@@ -1,0 +1,23 @@
+[
+  {
+    "order_id": "10001",
+    "customer_id": "C1001",
+    "product_id": "P1001",
+    "status": "DELIVERED",
+    "delivery_date": "2026-09-03"
+  },
+  {
+    "order_id": "10002",
+    "customer_id": "C1002",
+    "product_id": "P1002",
+    "status": "SHIPPED",
+    "delivery_date": "2026-09-10"
+  },
+  {
+    "order_id": "10003",
+    "customer_id": "C1003",
+    "product_id": "P1003",
+    "status": "DELIVERED",
+    "delivery_date": "2026-08-01"
+  }
+]
