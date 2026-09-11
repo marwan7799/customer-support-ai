@@ -26,7 +26,7 @@ Required functionality:
 
 ## Team split
 
-### You — AI / Agent
+### me — AI / Agent
 - Ollama integration
 - system prompt
 - conversation history
@@ -79,4 +79,4 @@ customer-support-ai/
 
 ## Bonus scope
 
-RAG is not included in this starter version. Finish the required features first.
+RAG is not included in this starter version.
