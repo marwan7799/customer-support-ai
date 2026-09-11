@@ -1,25 +1,41 @@
+"""
+Tool: get_order_status
+Purpose: Check delivery/order status for a given order_id.
+"""
 import json
-from pathlib import Path
-
-ORDERS_PATH = Path(__file__).parents[1] / "data" / "orders.json"
-
-
-def _load_orders():
-    return json.loads(ORDERS_PATH.read_text(encoding="utf-8"))
+from tools._data import load_json
 
 
 def get_order_status(order_id: str) -> dict:
-    """Return the status information for an order."""
-    orders = _load_orders()
-    order = next((o for o in orders if o["order_id"] == str(order_id)), None)
+    """
+    Look up an order by ID.
 
-    if not order:
-        return {"ok": False, "error": "Order not found."}
+    Args:
+        order_id: The order identifier, e.g. "ORD1001"
 
-    return {
-        "ok": True,
-        "order_id": order["order_id"],
-        "customer_id": order["customer_id"],
-        "status": order["status"],
-        "delivery_date": order["delivery_date"],
-    }
+    Returns:
+        {"success": True, "data": {...order fields...}}
+        or
+        {"success": False, "error": "<reason>"}
+    """
+    if not order_id or not isinstance(order_id, str):
+        return {"success": False, "error": "order_id must be a non-empty string."}
+
+    try:
+        orders = load_json("orders.json")
+    except FileNotFoundError:
+        return {"success": False, "error": "Order database is currently unavailable."}
+    except json.JSONDecodeError:
+        return {"success": False, "error": "Order database is corrupted."}
+
+    order = next((o for o in orders if o.get("order_id") == order_id.strip()), None)
+    if order is None:
+        return {"success": False, "error": f"No order found with ID '{order_id}'."}
+
+    return {"success": True, "data": order}
+
+
+if __name__ == "__main__":
+    print(get_order_status("ORD1001"))   
+    print(get_order_status("ORD9999"))  
+    print(get_order_status(""))        
