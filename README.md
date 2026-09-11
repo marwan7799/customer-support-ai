@@ -79,4 +79,4 @@ customer-support-ai/
 
 ## Bonus scope
 
-RAG is not included in this starter version.
+RAG is not included in this starter version. 
