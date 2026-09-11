@@ -1,36 +1,40 @@
+"""
+Tool: get_product_info
+Purpose: Retrieve product details (name, price, category, warranty).
+"""
 import json
-from pathlib import Path
-
-PRODUCTS_PATH = Path(__file__).parents[1] / "data" / "products.json"
-
-
-def _load_products():
-    return json.loads(PRODUCTS_PATH.read_text(encoding="utf-8"))
+from tools._data import load_json
 
 
 def get_product_info(product_id: str) -> dict:
-    """Return product information."""
-    products = _load_products()
-    product = next((p for p in products if p["product_id"] == str(product_id)), None)
+    """
+    Look up product details by ID.
 
-    if not product:
-        return {"ok": False, "error": "Product not found."}
+    Args:
+        product_id: The product identifier, e.g. "P100"
 
-    return {"ok": True, **product}
+    Returns:
+        {"success": True, "data": {...product fields...}}
+        or
+        {"success": False, "error": "<reason>"}
+    """
+    if not product_id or not isinstance(product_id, str):
+        return {"success": False, "error": "product_id must be a non-empty string."}
+
+    try:
+        products = load_json("products.json")
+    except FileNotFoundError:
+        return {"success": False, "error": "Product database is currently unavailable."}
+    except json.JSONDecodeError:
+        return {"success": False, "error": "Product database is corrupted."}
+
+    product = next((p for p in products if p.get("product_id") == product_id.strip()), None)
+    if product is None:
+        return {"success": False, "error": f"No product found with ID '{product_id}'."}
+
+    return {"success": True, "data": product}
 
 
-def check_stock(product_id: str) -> dict:
-    """Return stock availability for a product."""
-    products = _load_products()
-    product = next((p for p in products if p["product_id"] == str(product_id)), None)
-
-    if not product:
-        return {"ok": False, "error": "Product not found."}
-
-    return {
-        "ok": True,
-        "product_id": product["product_id"],
-        "product_name": product["name"],
-        "stock": product["stock"],
-        "in_stock": product["stock"] > 0,
-    }
+if __name__ == "__main__":
+    print(get_product_info("P100"))  
+    print(get_product_info("P999"))  
