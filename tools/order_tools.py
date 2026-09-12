@@ -1,25 +1,21 @@
-import json
-from pathlib import Path
+"""Order-status lookup tool."""
 
-ORDERS_PATH = Path(__file__).parents[1] / "data" / "orders.json"
-
-
-def _load_orders():
-    return json.loads(ORDERS_PATH.read_text(encoding="utf-8"))
+from tools._data import DataStoreError, find_by_id, load_records, normalize_identifier
 
 
 def get_order_status(order_id: str) -> dict:
-    """Return the status information for an order."""
-    orders = _load_orders()
-    order = next((o for o in orders if o["order_id"] == str(order_id)), None)
+    """Return the matching order record for a valid order ID."""
+    order_id = normalize_identifier(order_id)
+    if order_id is None:
+        return {"success": False, "error": "order_id must be a non-empty string."}
 
-    if not order:
-        return {"ok": False, "error": "Order not found."}
+    try:
+        orders = load_records("orders.json")
+    except DataStoreError:
+        return {"success": False, "error": "Order database is currently unavailable."}
 
-    return {
-        "ok": True,
-        "order_id": order["order_id"],
-        "customer_id": order["customer_id"],
-        "status": order["status"],
-        "delivery_date": order["delivery_date"],
-    }
+    order = find_by_id(orders, "order_id", order_id)
+    if order is None:
+        return {"success": False, "error": f"No order found with ID '{order_id}'."}
+
+    return {"success": True, "data": order}
