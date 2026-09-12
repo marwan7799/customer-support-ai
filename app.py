@@ -1,8 +1,8 @@
 """Gradio user interface for the AI customer-support agent."""
 
 from __future__ import annotations
-
 import logging
+logging.basicConfig(level=logging.INFO)
 from typing import Any, Iterator
 
 import gradio as gr

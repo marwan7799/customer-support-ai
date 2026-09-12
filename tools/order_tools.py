@@ -1,5 +1,4 @@
 """Order-status lookup tool."""
-
 from tools._data import DataStoreError, find_by_id, load_records, normalize_identifier
 
 
